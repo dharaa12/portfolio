@@ -1108,9 +1108,13 @@ footer { padding-top: 32px; margin-top: 16px; border-top: 1px solid var(--line);
   document.querySelectorAll(".demo").forEach(fig => {
     const video = fig.querySelector("video");
     const empty = fig.querySelector(".empty");
-    video.addEventListener("loadeddata", () => { empty.hidden = true; });
+    // Safari with preload="metadata" never fires loadeddata before play, so also hide on loadedmetadata
+    const ready = () => { empty.hidden = true; };
+    video.addEventListener("loadedmetadata", ready);
+    video.addEventListener("loadeddata", ready);
     video.addEventListener("error", () => { empty.hidden = false; });
-    video.src = fig.dataset.video;
+    // "#t=0.1" makes Safari paint the first frame as a preview instead of a blank screen
+    video.src = fig.dataset.video + "#t=0.1";
   });
 
   // Screenshots: show a labeled slot until the image file exists
