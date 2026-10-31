@@ -1,0 +1,1130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Dharaa Bahukhandi: product case studies on BeReal Unavailable Hours and GreenRoute.">
+<title>Dharaa · Product Case Studies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a short front page of project cards; each case study opens with a scan strip and summary,
+   and the deeper analysis expands in place. Process steps always run left to right. */
+:root {
+  --paper: #f5f6f2;
+  --surface: #ffffff;
+  --ink: #17201b;
+  --muted: #59645d;
+  --line: #d9dfd8;
+  --accent: #2e7a4e;
+  --accent-soft: #e2efe6;
+  --phone: #121614;
+  --good: #2f7a47;  --good-soft: #e3f1e6;
+  --bad: #b23b2e;   --bad-soft: #f8e3df;
+  --idea: #8a6200;  --idea-soft: #fbf0d2;
+
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --f-body: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  --s-xs: 0.78rem; --s-sm: 0.92rem; --s-md: 1.05rem; --s-lg: 1.3rem; --s-xl: 1.9rem;
+  --s-hero: clamp(2.5rem, 6vw, 4.4rem);
+}
+[data-project="bereal"] { --accent: #c4511d; --accent-soft: #f8e6dc; }
+[data-project="aws"] { --accent: #1f5f8b; --accent-soft: #e0ecf5; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #111613; --surface: #182019; --ink: #e8ede9; --muted: #9aa69f; --line: #2b3530;
+    --accent: #6cc28f; --accent-soft: #1d3127; --phone: #050706;
+    --good: #7ccf95; --good-soft: #1b3123; --bad: #f08f82; --bad-soft: #3a201c; --idea: #e8c35c; --idea-soft: #352c12;
+    color-scheme: dark;
+  }
+  :root:not([data-theme="light"]) [data-project="bereal"] { --accent: #f08a55; --accent-soft: #3a2419; }
+  :root:not([data-theme="light"]) [data-project="aws"] { --accent: #6fb1e0; --accent-soft: #172a38; }
+}
+:root[data-theme="dark"] {
+  --paper: #111613; --surface: #182019; --ink: #e8ede9; --muted: #9aa69f; --line: #2b3530;
+  --accent: #6cc28f; --accent-soft: #1d3127; --phone: #050706;
+  --good: #7ccf95; --good-soft: #1b3123; --bad: #f08f82; --bad-soft: #3a201c; --idea: #e8c35c; --idea-soft: #352c12;
+  color-scheme: dark;
+}
+:root[data-theme="dark"] [data-project="bereal"] { --accent: #f08a55; --accent-soft: #3a2419; }
+:root[data-theme="dark"] [data-project="aws"] { --accent: #6fb1e0; --accent-soft: #172a38; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--f-body); font-size: var(--s-md); line-height: 1.6;
+  padding-inline: clamp(16px, 4vw, 48px); padding-block: 0 64px;
+}
+.wrap { max-width: 1120px; margin-inline: auto; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.12; }
+p, ul, ol, figure { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.label {
+  font-family: var(--f-mono); font-size: var(--s-xs); font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.muted { color: var(--muted); }
+.small { font-size: var(--s-sm); }
+
+/* ---------- top bar ---------- */
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--paper); border-bottom: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+  padding-block: 14px;
+}
+.brand { font-family: var(--f-display); font-weight: 700; font-size: var(--s-md); color: var(--ink); text-decoration: none; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tabs a {
+  font-family: var(--f-mono); font-size: var(--s-xs); text-transform: uppercase; letter-spacing: 0.06em;
+  text-decoration: none; color: var(--muted); padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line);
+}
+.tabs a[aria-current="page"] { color: var(--paper); background: var(--ink); border-color: var(--ink); }
+
+/* ---------- home ---------- */
+.home-hero { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(24px, 5vw, 56px); align-items: center; padding-block: clamp(40px, 7vw, 80px) 40px; }
+.portrait { width: clamp(180px, 22vw, 260px); max-width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 18px; background: var(--accent-soft); display: block; }
+.intro { display: grid; gap: 16px; max-width: 46rem; }
+.intro h1 { font-size: var(--s-hero); font-weight: 800; letter-spacing: -0.02em; }
+.intro p { font-size: var(--s-lg); line-height: 1.5; }
+.strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-block: 8px 40px; border-bottom: 1px solid var(--line); }
+.strengths div { display: grid; gap: 4px; align-content: start; }
+.strengths h3 { font-size: var(--s-md); }
+.strengths p { font-size: var(--s-sm); color: var(--muted); }
+.cards-title { font-size: var(--s-xl); padding-top: 40px; }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding-block: 20px 40px; }
+.card {
+  display: grid; grid-template-rows: auto auto auto auto 1fr auto auto; gap: 14px; padding: 24px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+}
+.card .band {
+  border-radius: 10px; background: var(--accent-soft); padding: 20px; display: flex; justify-content: space-between; align-items: end; gap: 12px; min-height: 120px;
+}
+.card .band strong { font-family: var(--f-display); font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--accent); line-height: 1; }
+.card .band span { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--accent); text-align: right; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-family: var(--f-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.card h2 { font-size: var(--s-lg); }
+.card p { font-size: var(--s-sm); }
+.owned { font-size: var(--s-sm); border-top: 1px solid var(--line); padding-top: 12px; }
+.owned b { font-family: var(--f-mono); font-size: var(--s-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 500; display: block; margin-bottom: 2px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; justify-self: start;
+  font-family: var(--f-mono); font-size: var(--s-xs); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500;
+  text-decoration: none; color: var(--paper); background: var(--accent); padding: 10px 16px; border-radius: 999px;
+}
+.btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+/* Wide in-progress card: band on the left, story on the right */
+.card.wide { grid-column: 1 / -1; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); grid-template-rows: none; column-gap: 28px; align-items: start; border-style: dashed; }
+.card.wide .band { grid-row: 1 / span 10; min-height: 100%; flex-direction: column; align-items: start; justify-content: space-between; }
+.card.wide .band span { text-align: left; }
+.card.wide > :not(.band) { grid-column: 2; }
+.status { font-family: var(--f-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 9px; border-radius: 999px; background: var(--accent); color: var(--paper); justify-self: start; }
+.later { font-size: var(--s-sm); color: var(--muted); }
+.card-list { display: grid; gap: 8px; padding-left: 1.1em; margin: 0; font-size: var(--s-sm); }
+.card-list li::marker { color: var(--accent); }
+.later b { color: var(--ink); font-weight: 600; }
+
+.exp { display: grid; gap: 20px; padding-block: 8px 40px; border-top: 1px solid var(--line); padding-top: 40px; }
+.exp > h2 { font-size: var(--s-xl); }
+.exp ol { list-style: none; padding: 0; display: grid; }
+.exp li { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 8px 32px; padding-block: 18px; border-bottom: 1px solid var(--line); }
+.exp li:last-child { border-bottom: 0; }
+.exp .when { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); padding-top: 4px; font-variant-numeric: tabular-nums; }
+.exp li div { display: grid; gap: 4px; min-width: 0; }
+.exp h3 { font-size: var(--s-lg); }
+.exp .org { font-size: var(--s-sm); color: var(--accent); font-weight: 600; }
+.exp p { font-size: var(--s-sm); max-width: 66ch; }
+
+.exp .pts { display: grid; gap: 6px; padding-left: 1.1em; font-size: var(--s-sm); max-width: 66ch; }
+.exp .pts li { display: list-item; padding: 0; border: 0; }
+.exp .pts li::marker { color: var(--accent); }
+
+.chain { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.chain li { position: relative; background: var(--accent-soft); border-radius: 10px; padding: 12px 14px; display: grid; gap: 4px; align-content: start; font-size: var(--s-xs); color: var(--muted); }
+.chain li b { font-size: var(--s-sm); color: var(--ink); }
+.chain li:not(:last-child)::after { content: "→"; position: absolute; right: -10px; top: 50%; transform: translate(50%, -50%); color: var(--accent); font-weight: 700; z-index: 1; }
+
+.screens.wide { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.screens.wide .shot { aspect-ratio: 16 / 10; }
+
+.screens.phones { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px 16px; }
+.screens.phones .shot { aspect-ratio: 437 / 900; border: 0; border-radius: 0; background: transparent; overflow: visible; }
+.screens.phones .shot img { object-fit: contain; }
+
+/* ---------- case hero ---------- */
+.back { display: inline-block; margin-top: 24px; font-size: var(--s-sm); text-decoration: none; }
+.hero {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(24px, 5vw, 72px);
+  align-items: start; padding-block: 24px 40px;
+}
+.hero-text { display: grid; gap: 18px; min-width: 0; }
+.hero h1 { font-size: var(--s-hero); font-weight: 800; letter-spacing: -0.02em; }
+.hero h1 span { color: var(--accent); }
+.goal { font-size: var(--s-lg); line-height: 1.45; max-width: 36ch; }
+.links { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.scan {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0;
+  border: 1px solid var(--line); border-radius: 12px; background: var(--surface); margin-top: 6px;
+}
+.scan div { padding: 14px 16px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.scan div + div { border-left: 1px solid var(--line); }
+.scan dd { margin: 0; font-size: var(--s-sm); }
+.scan dt { margin: 0; }
+
+/* vertical video */
+.demo { width: clamp(210px, 22vw, 270px); max-width: 100%; display: grid; gap: 10px; justify-items: center; }
+.phone {
+  position: relative; width: 100%; aspect-ratio: 9 / 16; border-radius: 30px; overflow: hidden;
+  background: var(--phone); border: 7px solid var(--phone); box-shadow: 0 24px 50px -24px rgba(0,0,0,0.45);
+}
+.phone video { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 22px; background: var(--phone); }
+.phone .empty {
+  position: absolute; inset: 0; display: grid; place-content: center; gap: 12px; text-align: center; padding: 20px;
+  color: #cfd8d2; font-size: var(--s-sm); border-radius: 22px;
+  background: radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, var(--accent) 45%, transparent), transparent 70%), var(--phone);
+}
+.phone .empty[hidden] { display: none; }
+.btn[hidden] { display: none; }
+.phone video:fullscreen { object-fit: contain; background: #000; border-radius: 0; }
+.phone video:-webkit-full-screen { object-fit: contain; background: #000; border-radius: 0; }
+.demo.center { align-self: center; }
+/* Landscape web-app recording: wider demo column, browser-shaped frame */
+.demo.wide { width: clamp(300px, 40vw, 500px); align-self: center; }
+.phone.browser { aspect-ratio: 1280 / 1166; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.phone.browser video { border-radius: 0; object-fit: cover; object-position: top; background: var(--surface); }
+.phone.browser video:fullscreen { object-fit: contain; background: #000; }
+.phone.browser video:-webkit-full-screen { object-fit: contain; background: #000; }
+.phone.browser .empty { border-radius: 0; }
+
+/* Video that already contains its own phone mockup: no drawn bezel, mask away the black around it */
+.phone.mock { aspect-ratio: 576 / 1182; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.phone.mock video {
+  border-radius: 0; background: transparent;
+  -webkit-mask: url(media/bereal-phone-mask.png) center / 100% 100% no-repeat;
+  mask: url(media/bereal-phone-mask.png) center / 100% 100% no-repeat;
+}
+.phone.mock video:fullscreen { -webkit-mask: none; mask: none; background: #000; }
+.phone.mock video:-webkit-full-screen { -webkit-mask: none; mask: none; background: #000; }
+.phone .empty code { font-family: var(--f-mono); font-size: var(--s-xs); color: #fff; word-break: break-all; }
+.demo figcaption { font-size: var(--s-xs); color: var(--muted); text-align: center; }
+
+/* summary bullets */
+.did { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 16px 40px; padding-block: 32px; border-top: 1px solid var(--line); }
+.did ul { display: grid; gap: 10px; padding-left: 1.1em; max-width: 68ch; }
+.did li::marker { color: var(--accent); }
+
+/* intro box (what is BeReal) */
+.explainer {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; margin-block: 8px 32px;
+}
+.explainer h2 { font-size: var(--s-lg); }
+.explainer > div { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.rules { list-style: none; padding: 0; display: grid; gap: 8px; }
+.rules li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; font-size: var(--s-sm); }
+.rules li::before { content: attr(data-n); font-family: var(--f-mono); font-size: var(--s-xs); color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; width: 24px; height: 24px; display: grid; place-content: center; }
+
+/* constraint callout */
+.constraint {
+  background: var(--ink); color: var(--paper); border-radius: 14px; padding: clamp(22px, 4vw, 36px);
+  display: grid; gap: 18px; margin-bottom: 32px;
+}
+.constraint .label { color: color-mix(in srgb, var(--paper) 70%, transparent); }
+.constraint h2 { font-size: clamp(1.5rem, 3.4vw, 2.3rem); max-width: 26ch; }
+.pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.pillars div { border: 1px solid color-mix(in srgb, var(--paper) 25%, transparent); border-radius: 10px; padding: 14px; display: grid; gap: 2px; }
+.pillars b { font-family: var(--f-display); font-size: var(--s-lg); }
+.pillars span { font-size: var(--s-sm); color: color-mix(in srgb, var(--paper) 72%, transparent); }
+
+/* horizontal process flow */
+.process { list-style: none; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 0; margin-bottom: 8px; }
+.process li { position: relative; display: grid; gap: 6px; align-content: start; padding: 16px 14px 0 0; }
+.process li::before { content: ""; position: absolute; top: 5px; left: 0; right: 0; height: 2px; background: var(--line); }
+.process li::after { content: ""; position: absolute; top: 0; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
+.process a, .process strong { font-family: var(--f-display); font-weight: 700; font-size: var(--s-md); text-decoration: none; color: var(--ink); }
+.process a:hover { color: var(--accent); }
+.process span { font-size: var(--s-xs); color: var(--muted); line-height: 1.45; }
+
+/* sections */
+.section {
+  display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 16px 40px;
+  padding-block: 48px; border-top: 1px solid var(--line); scroll-margin-top: 80px;
+}
+.section > .label { padding-top: 8px; }
+.section > .label b { display: block; color: var(--accent); font-weight: 500; margin-bottom: 4px; }
+.body { display: grid; gap: 20px; min-width: 0; }
+.body h2 { font-size: var(--s-xl); font-weight: 700; letter-spacing: -0.01em; max-width: 26ch; }
+.body > p { max-width: 66ch; }
+.body h3.sub { font-size: var(--s-lg); margin-top: 8px; }
+.moment { border-left: 3px solid var(--accent); padding: 4px 0 4px 18px; font-style: italic; max-width: 62ch; }
+.three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.three div { display: grid; gap: 6px; align-content: start; }
+.three h3 { font-size: var(--s-md); font-weight: 700; }
+.three p { font-size: var(--s-sm); color: var(--muted); }
+.persona { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.persona div { padding: 18px 20px; display: grid; gap: 6px; align-content: start; }
+.persona div + div { border-left: 1px solid var(--line); }
+.persona p { font-size: var(--s-sm); }
+.takeaway { background: var(--accent-soft); border-radius: 10px; padding: 16px 18px; display: grid; gap: 4px; max-width: 70ch; }
+.takeaway .label { color: var(--accent); }
+
+/* expand in place */
+details.more { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+details.more > summary {
+  list-style: none; cursor: pointer; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  font-weight: 600; font-size: var(--s-sm); color: var(--accent);
+}
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::after { content: "+"; font-family: var(--f-mono); font-size: 1.2rem; line-height: 1; }
+details.more[open] > summary::after { content: "−"; }
+details.more > summary span { color: var(--muted); font-weight: 400; }
+.more-body { padding: 4px 18px 20px; display: grid; gap: 18px; min-width: 0; }
+
+/* score bars */
+.scale { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--s-xs); color: var(--muted); }
+.bars { display: grid; gap: 0; }
+.bars .row { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr) minmax(0, 1.6fr); gap: 16px; padding-block: 12px; border-bottom: 1px solid var(--line); align-items: center; }
+.bars .row.head { padding-block: 0 8px; }
+.bars .row:last-child { border-bottom: 0; }
+.bars .name { font-weight: 600; font-size: var(--s-sm); }
+.bars .insight { font-size: var(--s-sm); color: var(--muted); }
+.meter { display: flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-size: var(--s-xs); font-variant-numeric: tabular-nums; }
+.meter i { display: block; height: 10px; border-radius: 5px; background: var(--accent); }
+.meter.dim i { background: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+.track { flex: 1; background: var(--paper); border-radius: 5px; }
+
+/* journey */
+.journey { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.journey li { border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: grid; gap: 4px; align-content: start; font-size: var(--s-xs); color: var(--muted); background: var(--paper); }
+.journey li b { font-size: var(--s-sm); color: var(--ink); }
+.journey li.hit { border-color: var(--accent); background: var(--accent-soft); }
+.journey li.hit em { color: var(--accent); font-style: normal; font-weight: 600; }
+
+/* competitors */
+.tiers { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: var(--s-sm); }
+.tiers b { font-family: var(--f-mono); font-size: var(--s-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 500; margin-right: 6px; }
+.quad { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 24px; align-items: center; }
+.quad svg { width: 100%; max-width: 460px; height: auto; display: block; }
+.quad svg .ax { stroke: var(--line); stroke-width: 1.5; }
+.quad svg .q { fill: var(--muted); font: 500 10px var(--f-mono); letter-spacing: 0.04em; }
+.quad svg .axl { fill: var(--muted); font: 500 10.5px var(--f-mono); }
+.quad svg .ring { fill: none; stroke: var(--accent); stroke-width: 2; }
+.quad svg .nm { fill: var(--ink); font: 700 13px var(--f-display); }
+.quad svg .zone { fill: var(--accent-soft); }
+.comps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.comp { display: grid; grid-template-rows: auto auto 1fr; gap: 12px; }
+.shot { aspect-ratio: 3 / 4; max-width: 100%; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: var(--surface); position: relative; }
+.shot img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.shot .ph { position: absolute; inset: 0; display: grid; place-content: center; gap: 6px; text-align: center; padding: 16px; background: repeating-linear-gradient(135deg, var(--paper) 0 10px, var(--surface) 10px 20px); color: var(--muted); font-size: var(--s-xs); }
+.shot .ph code { font-family: var(--f-mono); word-break: break-all; }
+.comp .shot { aspect-ratio: 1 / 2; }
+.comp h3 { font-size: var(--s-lg); }
+.comp dl { margin: 0; display: grid; gap: 8px; align-content: start; }
+.comp dt { font-family: var(--f-mono); font-size: var(--s-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.comp dd { margin: 0; font-size: var(--s-sm); }
+.comp dd.fix { background: var(--accent-soft); padding: 10px 12px; border-radius: 6px; }
+
+/* tables */
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+.tbl table { width: 100%; border-collapse: collapse; font-size: var(--s-sm); min-width: 620px; }
+.tbl th, .tbl td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.tbl th { font-family: var(--f-mono); font-size: var(--s-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 500; }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl td:first-child { font-weight: 600; }
+.cat { font-family: var(--f-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+
+/* decision */
+.options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.option { border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 8px; align-content: start; background: var(--surface); }
+.option.chosen { border: 2px solid var(--accent); }
+.option .verdict { font-family: var(--f-mono); font-size: var(--s-xs); text-transform: uppercase; letter-spacing: 0.06em; }
+.option.chosen .verdict { color: var(--accent); }
+.option:not(.chosen) .verdict { color: var(--muted); }
+.option h3 { font-size: var(--s-lg); }
+.option p, .option li { font-size: var(--s-sm); }
+.option ul { padding-left: 1.1em; display: grid; gap: 4px; }
+
+.insights { display: grid; border-top: 1px solid var(--line); }
+.insight { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr); gap: 24px; padding-block: 16px; border-bottom: 1px solid var(--line); }
+.insight h3 { font-size: var(--s-lg); }
+.insight p { font-size: var(--s-sm); color: var(--muted); }
+
+/* screen flow */
+.screens { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.screens.five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.screens li { display: grid; gap: 8px; align-content: start; font-size: var(--s-sm); }
+.screens .shot { aspect-ratio: 9 / 16; }
+.screens b { font-family: var(--f-display); font-size: var(--s-md); }
+.screens .new { font-family: var(--f-mono); font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* testing */
+.timeline { display: flex; gap: 4px; }
+.timeline div { padding: 10px 12px; border-radius: 8px; background: var(--accent-soft); display: grid; gap: 2px; min-width: 0; }
+.timeline b { font-size: var(--s-sm); }
+.timeline span { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--accent); }
+.findings { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.fcol { border-radius: 12px; padding: 16px; display: grid; gap: 10px; align-content: start; }
+.fcol.good { background: var(--good-soft); } .fcol.bad { background: var(--bad-soft); } .fcol.idea { background: var(--idea-soft); }
+.fcol h3 { font-size: var(--s-md); display: flex; gap: 8px; align-items: center; }
+.fcol.good h3 { color: var(--good); } .fcol.bad h3 { color: var(--bad); } .fcol.idea h3 { color: var(--idea); }
+.fcol h3 i { font-style: normal; font-family: var(--f-mono); width: 22px; height: 22px; border-radius: 50%; display: grid; place-content: center; font-size: 0.8rem; border: 1.5px solid currentColor; }
+.fcol blockquote { margin: 0; font-size: var(--s-sm); }
+.fcol blockquote small { display: block; color: var(--muted); font-size: var(--s-xs); margin-top: 2px; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.stat { border-top: 2px solid var(--accent); padding-top: 10px; display: grid; gap: 4px; }
+.stat strong { font-family: var(--f-display); font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stat span { font-size: var(--s-sm); }
+.next { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 32px; padding-left: 1.1em; }
+.next li { font-size: var(--s-sm); }
+.next li::marker { color: var(--accent); }
+
+.connect { margin-top: 48px; padding: clamp(28px, 5vw, 56px) clamp(20px, 4vw, 40px); border-radius: 16px; background: var(--ink); color: var(--paper); display: grid; gap: 14px; justify-items: center; text-align: center; }
+.connect-row { justify-content: center; }
+.connect .label { color: color-mix(in srgb, var(--paper) 70%, transparent); }
+.connect h2 { font-size: clamp(1.5rem, 3.4vw, 2.2rem); max-width: 24ch; }
+.connect p { max-width: 52ch; color: color-mix(in srgb, var(--paper) 85%, transparent); }
+.connect-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 6px; }
+.email { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 8px 8px 8px 16px; border: 1px solid color-mix(in srgb, var(--paper) 30%, transparent); border-radius: 999px; min-width: 0; }
+.email .addr { font-family: var(--f-mono); font-size: var(--s-sm); user-select: all; word-break: break-all; }
+.copy { font-family: var(--f-mono); font-size: var(--s-xs); text-transform: uppercase; letter-spacing: 0.06em; border: 0; border-radius: 999px; padding: 8px 14px; cursor: pointer; background: var(--paper); color: var(--ink); }
+.connect .btn { background: var(--paper); color: var(--ink); }
+footer { padding-top: 32px; margin-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: var(--s-sm); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; }
+  .demo { justify-self: center; width: min(250px, 100%); }
+  .demo.wide { width: 100%; }
+  .section, .did { grid-template-columns: 1fr; }
+  .home-hero { grid-template-columns: 1fr; }
+  .exp li { grid-template-columns: 1fr; }
+  .card.wide { grid-template-columns: 1fr; }
+  .card.wide .band { grid-row: auto; min-height: 120px; }
+  .card.wide > :not(.band) { grid-column: auto; }
+  .portrait { width: min(200px, 60%); }
+  .cards, .strengths, .explainer, .options, .quad, .stats, .next { grid-template-columns: 1fr; }
+  .three, .persona, .comps, .findings, .pillars { grid-template-columns: 1fr; }
+  .persona div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .scan { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .scan div + div { border-left: 0; }
+  .scan div:nth-child(even) { border-left: 1px solid var(--line); }
+  .scan div:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .shot { aspect-ratio: 4 / 3; }
+  .screens, .screens.five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .screens.wide { grid-template-columns: 1fr; }
+  .screens.phones { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .screens.phones .shot { aspect-ratio: 437 / 900; }
+  .screens.wide .shot { aspect-ratio: 16 / 10; }
+  .insight { grid-template-columns: 1fr; gap: 6px; }
+  .journey { grid-template-columns: 1fr; }
+  .chain { grid-template-columns: 1fr; }
+  .chain li:not(:last-child)::after { content: "↓"; right: 50%; top: auto; bottom: -10px; transform: translate(50%, 50%); }
+  .bars .row { grid-template-columns: 1fr; gap: 6px; }
+  .bars .row.head { display: none; }
+  .process { grid-auto-flow: row; grid-auto-columns: auto; gap: 14px; }
+  .process li { padding: 0 0 0 26px; }
+  .process li::before { top: 16px; bottom: -14px; left: 5px; right: auto; width: 2px; height: auto; }
+  .process li:last-child::before { display: none; }
+  .process li::after { top: 4px; }
+  .timeline { flex-wrap: wrap; }
+}
+@media (max-width: 480px) { .scan { grid-template-columns: 1fr; } .scan div:nth-child(even) { border-left: 0; } .scan div + div { border-top: 1px solid var(--line); } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media (prefers-reduced-motion: no-preference) {
+  [data-view]:not([hidden]) .hero-text > *, [data-view]:not([hidden]) .intro > * { animation: rise 0.45s ease both; }
+  [data-view]:not([hidden]) .hero-text > *:nth-child(2), [data-view]:not([hidden]) .intro > *:nth-child(2) { animation-delay: 60ms; }
+  [data-view]:not([hidden]) .hero-text > *:nth-child(3), [data-view]:not([hidden]) .intro > *:nth-child(3) { animation-delay: 120ms; }
+  @keyframes rise { from { transform: translateY(8px); opacity: 0.4; } to { transform: none; opacity: 1; } }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="#home">Dharaa</a>
+    <nav class="tabs" aria-label="Pages">
+      <a href="#home" data-tab="home">Work</a>
+      <a href="#bereal" data-tab="bereal">BeReal</a>
+      <a href="#greenroute" data-tab="greenroute">GreenRoute</a>
+    </nav>
+  </header>
+
+  <!-- =========================== HOME =========================== -->
+  <main id="home" data-view="home">
+    <section class="home-hero">
+      <img class="portrait" src="media/dharaa.jpg" alt="Portrait of Dharaa">
+      <div class="intro">
+        <span class="label">Product management · Computer science, NJIT '27</span>
+        <h1>Hi, I'm Dharaa.</h1>
+        <p>My work starts with one question: are we building the right thing? It's how I caught a map app that was just Google Maps, a feature that added pressure instead of removing it, and a climate model that scored well but warned no one.</p>
+        <p>I came to product from machine learning. It helps me weigh technical trade-offs with engineers, but I'm most useful deciding which problem is worth solving.</p>
+        <p class="small muted">Currently an AI &amp; Machine Learning Fellow with Cornell Tech's Break Through Tech AI Studio at Amazon Web Services.</p>
+        <div class="links">
+          <a class="btn" id="resume-link" href="media/Dharaa_LNU_Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+          <a class="btn ghost" href="https://www.linkedin.com/in/dharaa-lnu" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="strengths" aria-label="How I work">
+      <div><h3>Research first</h3><p>I start from what users actually say, in reviews, forums, and interviews, before proposing anything.</p></div>
+      <div><h3>Question the obvious idea</h3><p>I ask what makes a product different before we build it. That question shaped both projects below.</p></div>
+      <div><h3>Build to prove it</h3><p>I take ideas to something people can try, from a Figma prototype to a full working app.</p></div>
+    </section>
+
+    <h2 class="cards-title" id="work-title">Selected work</h2>
+    <section class="cards" aria-labelledby="work-title">
+      <article class="card" data-project="bereal">
+        <span class="label">Externship · BeReal</span>
+        <div class="band"><strong>Unavailable Hours</strong><span>Product management<br>externship</span></div>
+        <div class="chips"><span class="chip">Social app</span><span class="chip">Retention</span><span class="chip">Feature concept</span></div>
+        <h2>Keeping BeReal spontaneous, around real schedules</h2>
+        <p>BeReal's once-a-day alert kept landing during class and work, and late posts get labeled for friends to see. I found this through research across reviews and social media, ranked 7 ideas, and designed a way for people to block busy hours while the alert stays random. 83% of testers said they'd recommend it.</p>
+        <p class="owned"><b>What I owned</b>Research → Prioritization → Prototype → User testing</p>
+        <a class="btn" href="#bereal">Read the full story →</a>
+      </article>
+      <article class="card" data-project="greenroute">
+        <span class="label">Built project · Hackathon → Full-stack</span>
+        <div class="band"><strong>GreenRoute</strong><span>NYC Tech Week<br>+ full rebuild</span></div>
+        <div class="chips"><span class="chip">Sustainability</span><span class="chip">Navigation</span><span class="chip">0 → 1 build</span></div>
+        <h2>Greener trips that earn real rewards</h2>
+        <p>At a sustainability hackathon, our team's first idea was a map app with a green route. I asked why anyone would switch from Google Maps, and proposed a points marketplace: take the greener route, earn points, and spend them at local businesses. After the hackathon, I built it into a live app where New Yorkers can see each route's CO₂ and get rewarded for choosing the greener one.</p>
+        <p class="owned"><b>What I owned</b>Product direction → Team coordination → Full-stack build</p>
+        <a class="btn" href="#greenroute">Read the full story →</a>
+      </article>
+      <article class="card wide" data-project="aws">
+        <div class="band"><span class="status">In progress</span><strong>Climate risk<br>forecasting</strong><span>Break Through Tech<br>× Amazon Web Services<br>Sept 2026 – Present</span></div>
+        <span class="label">Fellowship · AWS</span>
+        <div class="chips"><span class="chip">Climate</span><span class="chip">Supply chain</span><span class="chip">Machine learning</span></div>
+        <h2>Making a climate model useful, not just accurate</h2>
+        <p><b>The goal:</b> give companies months of warning before El Niño and La Niña disrupt their supply chains, using 18 years of Pacific Ocean buoy data.</p>
+        <span class="label">What I've done</span>
+        <ul class="card-list">
+          <li><b>Kept the model tied to the user's need.</b> It could score well without warning anyone because each day's answer sat in the same row as its data. I refocused it on what a supply-chain planner needs: a forecast 3 months ahead, enough time to reroute shipments or stock up.</li>
+          <li><b>Defined what success means.</b> Beating "always predict normal" proves nothing. I set the bar at beating "next season looks like this one," so a win shows the model tells planners something they couldn't guess.</li>
+        </ul>
+        <p class="later"><b>Now:</b> the team is building and testing the model against the success bar I set.</p>
+        <p class="later"><b>Next: making the results easy to read.</b> I'll build a time-lapse map of the Pacific buoys, so leaders can watch climate risk build in seconds, without reading a chart.</p>
+        <div class="links"><a class="btn" href="https://github.com/Break-Through-Tech/AWS-1A-climate-risk-modeling-for-supply-chain-resiliency" target="_blank" rel="noopener">View the team repo ↗</a></div>
+      </article>
+    </section>
+
+    <section class="exp" aria-labelledby="exp-title">
+      <h2 id="exp-title">Leadership &amp; work</h2>
+      <ol>
+        <li>
+          <span class="when">Aug 2022 – Present</span>
+          <div><h3>Saksham Program Manager</h3><a class="org" href="https://www.linkedin.com/company/gogirlorganisation/" target="_blank" rel="noopener">Go Girl Organization ↗</a>
+          <p class="muted">Tutor, Aug 2022 → Program Manager for the Saksham Center, Nov 2022 – Present.</p>
+          <ul class="pts">
+            <li>I recruit and train volunteer tutors for coding workshops we run with Child Rights and You (CRY) India, a nonprofit partner. The program has reached 2,000+ students.</li>
+            <li>Our program fully funded the higher education of one of its students.</li>
+            <li>We're now building a pipeline that connects graduates of the program to internships and jobs.</li>
+          </ul></div>
+        </li>
+        <li>
+          <span class="when">Jan 2025 – Present</span>
+          <div><h3>Undergraduate Tutor</h3><span class="org">The Norma J. Clayton Learning Center, NJIT</span>
+          <p>I've led 100+ tutoring sessions in STEM courses, explaining technical ideas to students from many different backgrounds.</p></div>
+        </li>
+      </ol>
+    </section>
+
+  </main>
+
+  <!-- =========================== GREENROUTE =========================== -->
+  <main id="greenroute" data-view="greenroute" data-project="greenroute" hidden>
+    <a class="back" href="#home">← All projects</a>
+    <section class="hero">
+      <div class="hero-text">
+        <span class="label">NYC Tech Week hackathon · Web app</span>
+        <h1>Green<span>Route</span></h1>
+        <p class="goal">GreenRoute helps New Yorkers pick the lower-carbon way to get around by showing each route's CO₂ side by side, then rewarding the greener choice with points they can spend at local businesses.</p>
+        <dl class="scan">
+          <div><dt class="label">My role</dt><dd>Product lead and full-stack developer</dd></div>
+          <div><dt class="label">Team</dt><dd>Hackathon team; I led product direction and managed teammates</dd></div>
+          <div><dt class="label">What I built</dt><dd>Front end, back end, and accounts with live NYC transit data · React, Node.js, PostgreSQL</dd></div>
+          <div><dt class="label">Goal</dt><dd>Make the greener route the one people actually pick</dd></div>
+        </dl>
+        <div class="links">
+          <a class="btn" href="https://greenroute-nyc.vercel.app" target="_blank" rel="noopener">Open the live app →</a>
+          <!-- Add your GitHub link: put the URL in href and delete the word "hidden" -->
+          <a class="btn ghost" href="" target="_blank" rel="noopener" hidden>View on GitHub</a>
+        </div>
+      </div>
+      <figure class="demo center" data-video="media/greenroute-demo.mp4">
+        <div class="phone mock">
+          <video controls playsinline muted loop preload="metadata"></video>
+          <div class="empty"><span>Demo video</span></div>
+        </div>
+        <figcaption>Web app walkthrough</figcaption>
+      </figure>
+    </section>
+
+    <section class="did">
+      <div class="label">What I did</div>
+      <ul>
+        <li>I spotted that our first idea was just Google Maps with a green line, and proposed the points marketplace that gives people a reason to switch.</li>
+        <li>I led product direction and managed teammates during the hackathon, where we built the first front end with sample data.</li>
+        <li>After the event, I built a working version on my own: I designed and developed the front end and back end, added accounts to track points, and connected live NYC subway and bus data.</li>
+      </ul>
+    </section>
+
+    <ol class="process" aria-label="Project process">
+      <li><a href="#greenroute-problem">Discover</a><span>Hackathon theme: sustainability</span></li>
+      <li><a href="#greenroute-users">Define</a><span>"Why not just use Google Maps?"</span></li>
+      <li><a href="#greenroute-competitors">Benchmark</a><span>What existing apps miss</span></li>
+      <li><a href="#greenroute-solution">Design</a><span>Points you can spend locally</span></li>
+      <li><a href="#greenroute-build">Build</a><span>Hackathon front end, then a full rebuild</span></li>
+      <li><a href="#greenroute-learned">Learn</a><span>What I'd carry forward</span></li>
+    </ol>
+
+    <section class="section" id="greenroute-problem">
+      <div class="label"><b>01</b>The problem</div>
+      <div class="body">
+        <h2>Map apps answer "what's fastest?" Nobody asks "what's greenest?"</h2>
+        <p class="moment">You type Times Square into a map app, and it hands you the fastest route. The subway and bike options are a tab away, and nothing tells you that driving there from MoMA puts out about 580 g of CO₂, while the subway puts out about 103 g and a bike puts out none. So the fastest option wins, every time, by default.</p>
+        <div class="three">
+          <div><h3>The cost is invisible</h3><p>Trip emissions aren't shown anywhere people plan trips, so there's nothing to compare against.</p></div>
+          <div><h3>Kilograms mean nothing</h3><p>Even when the number is there, "580 g CO₂" is abstract. People can't feel the difference between two numbers they have no reference for.</p></div>
+          <div><h3>The payoff is delayed and shared</h3><p>The greener route can cost you time now, while the benefit goes to everyone later. Without something in it for you today, habit wins.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="greenroute-users">
+      <div class="label"><b>02</b>What it's for</div>
+      <div class="body">
+        <h2>For New Yorkers who already switch between subway, bike, and car.</h2>
+        <div class="persona">
+          <div><span class="label">Who</span><p>People in NYC who have real options for most trips (subway, bus, bike, car) and pick between them out of habit.</p></div>
+          <div><span class="label">What they want</span><p>To get where they're going easily, and to feel a greener choice was worth making, without doing research first.</p></div>
+          <div><span class="label">Why it matters</span><p>NYC's dense transit makes the low-carbon option realistic for most trips. The gap isn't access. It's that nothing makes the choice visible or rewarding.</p></div>
+        </div>
+        <div class="takeaway">
+          <span class="label">The question I raised at the hackathon</span>
+          <p>The team wanted to build "Google Maps, but with a green route." I asked: what would make someone open our app instead? Without an answer, we'd be building a copy. That question led to the rewards marketplace.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="greenroute-competitors">
+      <div class="label"><b>03</b>Competitors</div>
+      <div class="body">
+        <h2>Existing apps plan the trip well. None make the greener choice visible or worth it.</h2>
+        <div class="comps">
+          <figure class="comp">
+            <div class="shot"><img src="media/greenroute-google-maps.png" alt="Google Maps route options screen"></div>
+            <h3>Google Maps</h3>
+            <dl>
+              <dt>What's missing</dt><dd>Defaults to the fastest route. Driving, transit, and biking live in separate tabs, and emissions aren't part of the comparison.</dd>
+              <dt>How GreenRoute fills the gap</dt><dd class="fix">Drive, bike, and transit appear together in one list, each with its CO₂ and a Fastest or Greenest tag.</dd>
+            </dl>
+          </figure>
+          <figure class="comp">
+            <div class="shot"><img src="media/greenroute-citymapper.png" alt="Citymapper trip options screen"></div>
+            <h3>Citymapper</h3>
+            <dl>
+              <dt>What's missing</dt><dd>Excellent transit planning, but it ranks by time and convenience. Carbon isn't part of the decision.</dd>
+              <dt>How GreenRoute fills the gap</dt><dd class="fix">Shows how much each option cuts emissions and turns that into everyday terms, like miles of driving avoided.</dd>
+            </dl>
+          </figure>
+          <figure class="comp">
+            <div class="shot"><img src="media/greenroute-transit.png" alt="Transit app trip options from Lincoln Center to Grand Central with live departures"></div>
+            <h3>Transit</h3>
+            <dl>
+              <dt>What's missing</dt><dd>Strong real-time departures, but taking transit earns you nothing you can use. A good choice today doesn't add up to anything.</dd>
+              <dt>How GreenRoute fills the gap</dt><dd class="fix">Climate points, badges, and a leaderboard. Points unlock rewards from NYC businesses.</dd>
+            </dl>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="greenroute-solution">
+      <div class="label"><b>04</b>My solution</div>
+      <div class="body">
+        <h2>Make the carbon cost visible, make it relatable, then make it pay off.</h2>
+        <div class="insights">
+          <div class="insight"><h3>A green line alone is a copy</h3><p>Google Maps could add a green route tomorrow. Rewards that you can spend locally are a reason to open GreenRoute instead. This came from the question I raised at the hackathon.</p></div>
+          <div class="insight"><h3>Put carbon on the route card</h3><p>Driving, biking, and real NYC subway and bus routes appear side by side, each with its estimated CO₂, so the trade-off is visible at the moment of choice.</p></div>
+          <div class="insight"><h3>Turn kilograms into things people know</h3><p>Every saving is shown in everyday terms: tree-days of CO₂ absorbed, phone charges, and miles of driving avoided, using EPA equivalency factors.</p></div>
+          <div class="insight"><h3>Reward the choice with something real</h3><p>Greener trips earn climate points (10 per kg of CO₂ saved compared with driving) that unlock rewards from NYC businesses. Badges and a friends leaderboard keep progress visible. The rewards are examples for now: there are no live partnerships yet, and redemptions are simulated.</p></div>
+          <div class="insight"><h3>Start in New York</h3><p>Dense transit, live MTA data, and plenty of local businesses make NYC the right place to prove the route, savings, and rewards loop before expanding. The routing already works worldwide.</p></div>
+        </div>
+        <div class="tbl">
+          <table>
+            <thead><tr><th>A real trip: MoMA → Times Square</th><th>Time</th><th>CO₂</th><th>vs. driving</th><th>Climate points</th></tr></thead>
+            <tbody>
+              <tr><td>Drive · fastest</td><td>4 min</td><td>580 g</td><td>baseline</td><td>0</td></tr>
+              <tr><td>Subway + walk</td><td>14 min</td><td>103 g</td><td>82% less</td><td>+4</td></tr>
+              <tr><td>Bike · greenest</td><td>10 min</td><td>0 g</td><td>100% less</td><td>+5</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small muted">From the live app. Biking takes 6 minutes longer than driving but cuts all 580 g of CO₂, the same as avoiding about 1.4 miles of driving, or 10 tree-days of CO₂ absorption. That time cost is exactly why the greener choice needs a payoff. Points are 10 per kg of CO₂ saved. To keep them cheat-proof, the server calculates them from the trip's distance at fixed rates, so a subway trip can earn slightly less than its live CO₂ estimate suggests.</p>
+        <h3 class="sub">How it works</h3>
+        <ol class="screens wide">
+          <li><div class="shot"><img src="media/greenroute-routes-map.jpg" alt="GreenRoute route search with a map of New York City"></div><b>Search a route</b>Enter where you're going, the same as in any map app.</li>
+          <li><div class="shot"><img src="media/greenroute-routes.jpg" alt="GreenRoute comparing a drive, a subway trip, and a bike route from MoMA to Times Square, with CO₂ and points for each"></div><b>Compare every mode</b>Drive, bike, and transit appear side by side with CO₂, tagged fastest or greenest.</li>
+          <li><div class="shot"><img src="media/greenroute-history.jpg" alt="GreenRoute profile with trip history, CO₂ saved, and climate points"></div><b>Take the greener trip</b>Each green trip is logged with the CO₂ it saved and adds climate points to your account.</li>
+          <li><div class="shot"><img src="media/greenroute-marketplace.jpg" alt="GreenRoute marketplace of rewards from NYC businesses on a map"></div><b>Spend your points</b>Browse rewards from NYC businesses, like a free subway ride or a free matcha, on a map.</li>
+        </ol>
+        <h3 class="sub">Keeping people coming back</h3>
+        <ol class="screens wide">
+          <li><div class="shot"><img src="media/greenroute-leaderboard.jpg" alt="GreenRoute leaderboard ranked by CO₂ saved"></div><b>Leaderboard</b>Ranks people by total CO₂ saved, globally or among friends.</li>
+          <li><div class="shot"><img src="media/greenroute-badges.jpg" alt="GreenRoute badges, from First Step to Point Master"></div><b>Badges</b>Milestones from a first green trip to 500 climate points give people a next goal.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="greenroute-build">
+      <div class="label"><b>05</b>How I built it</div>
+      <div class="body">
+        <h2>From a hackathon demo to a working app.</h2>
+        <p>At the hackathon, we built the front end with sample data, enough to pitch the idea. I wanted to show it could really work, so I rebuilt it afterward on my own.</p>
+        <div class="options">
+          <div class="option"><span class="verdict">At the hackathon</span><h3>Team prototype</h3><ul><li>I led product direction and the marketplace idea</li><li>I managed teammates and split up the work</li><li>We built the front end with sample data</li></ul></div>
+          <div class="option chosen"><span class="verdict">After the hackathon</span><h3>My full-stack rebuild</h3><ul><li>I designed and built a new front end</li><li>I developed the back end and user accounts to track points</li><li>I connected live NYC subway and bus data in place of sample data</li><li>I made it installable on phones as a web app</li><li>I found out why the app took 9–10 seconds to load on slow connections and fixed it, making pages without a map about 75% lighter</li></ul></div>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="greenroute-learned">
+      <div class="label"><b>06</b>What I learned</div>
+      <div class="body">
+        <h2>The most useful question came before any code.</h2>
+        <div class="insights">
+          <div class="insight"><h3>Ask "why would someone switch?" first</h3><p>Our first idea worked, but nobody had a reason to use it over Google Maps. Answering that question shaped the whole product, and I now ask it before any feature work.</p></div>
+          <div class="insight"><h3>A demo hides what a product needs</h3><p>Sample data was enough to pitch. Accounts, live transit data, and slow phone connections only showed up when I built it for real, and each one changed the product.</p></div>
+          <div class="insight"><h3>Start small enough to prove it</h3><p>Launching in New York first, with dense transit and plenty of local businesses, made the idea testable. Trying to work everywhere at once would not have.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================== BEREAL =========================== -->
+  <main id="bereal" data-view="bereal" data-project="bereal" hidden>
+    <a class="back" href="#home">← All projects</a>
+    <section class="hero">
+      <div class="hero-text">
+        <span class="label">BeReal · Product management externship</span>
+        <h1>Unavailable <span>Hours</span></h1>
+        <p class="goal">Unavailable Hours lets BeReal users block the times they can't post, so the daily alert stays random but stops landing in the middle of class or work.</p>
+        <dl class="scan">
+          <div><dt class="label">My role</dt><dd>Product management extern, working solo · Jan – Mar 2026</dd></div>
+          <div><dt class="label">How I worked</dt><dd>Self-directed, about 10 hours a week, plus twice-weekly check-ins with the program's project manager</dd></div>
+          <div><dt class="label">Goal</dt><dd>Increase and retain monthly active users</dd></div>
+          <div><dt class="label">Outcome</dt><dd>83% of testers would recommend it</dd></div>
+        </dl>
+        <div class="links">
+          <a class="btn" href="https://www.figma.com/proto/Jb9A0Mktri4SlAxpt6d9wk/Unavailable-Hours-Prototype?node-id=4-98&amp;scaling=scale-down&amp;content-scaling=fixed&amp;page-id=0%3A1&amp;starting-point-node-id=4%3A98&amp;show-proto-sidebar=1" target="_blank" rel="noopener">Try the Figma prototype →</a>
+        </div>
+      </div>
+      <figure class="demo" data-video="media/bereal-demo.mp4">
+        <div class="phone mock">
+          <video controls playsinline muted loop preload="metadata"></video>
+          <div class="empty"><span>Demo video</span></div>
+        </div>
+        <figcaption>Prototype walkthrough</figcaption>
+      </figure>
+    </section>
+
+    <div class="explainer">
+      <div>
+        <span class="label">New to BeReal?</span>
+        <h2>A photo app built around one honest moment a day.</h2>
+        <p class="small">BeReal is a social app that took off in 2022. Its idea is simple: share what you're really doing, not a polished highlight. Fewer people use it daily now, and the challenge was to bring them back.</p>
+      </div>
+      <ol class="rules">
+        <li data-n="1">Once a day, at a random time, everyone gets the same alert: "Time to BeReal."</li>
+        <li data-n="2">You have 2 minutes to take a photo with your front and back cameras at once.</li>
+        <li data-n="3">You have to post before you can see your friends' posts.</li>
+        <li data-n="4">Post after the 2 minutes and your photo is labeled late, like "3 hours late."</li>
+      </ol>
+    </div>
+
+    <section class="did">
+      <div class="label">What I did</div>
+      <ul>
+        <li>I analyzed what users say about BeReal on TikTok, Reddit, and App Store reviews, and found that the timing of the daily alert was the biggest reason people miss posts and drift away.</li>
+        <li>I came up with 7 feature ideas, scored them by reach, impact, confidence, and effort, and picked Unavailable Hours.</li>
+        <li>I wrote the product requirements, built a clickable Figma prototype, and tested it with college-age users.</li>
+      </ul>
+    </section>
+
+    <div class="constraint">
+      <span class="label">The constraint that shaped every decision</span>
+      <h2>Grow users while competing with Instagram, Snapchat, and TikTok without copying their addictive design.</h2>
+      <div class="pillars">
+        <div><b>Real</b><span>not performative</span></div>
+        <div><b>Spontaneous</b><span>not addictive</span></div>
+        <div><b>Light</b><span>not polished</span></div>
+      </div>
+    </div>
+
+    <ol class="process" aria-label="Project process">
+      <li><a href="#bereal-problem">Discover</a><span>What users say online</span></li>
+      <li><a href="#bereal-users">Define</a><span>Timing drives missed posts</span></li>
+      <li><a href="#bereal-competitors">Benchmark</a><span>How rivals keep users</span></li>
+      <li><a href="#bereal-ideas">Prioritize</a><span>7 ideas, one winner</span></li>
+      <li><a href="#bereal-solution">Design</a><span>Decisions and prototype</span></li>
+      <li><a href="#bereal-business">Business case</a><span>Why it's worth building</span></li>
+      <li><a href="#bereal-testing">Validate</a><span>Test with users</span></li>
+      <li><a href="#bereal-learned">Learn</a><span>What I'd carry forward</span></li>
+      <li><a href="#bereal-next">Next</a><span>What I'd do before launch</span></li>
+    </ol>
+
+    <section class="section" id="bereal-problem">
+      <div class="label"><b>01</b>The problem</div>
+      <div class="body">
+        <h2>The alert is random. People's schedules aren't.</h2>
+        <p class="moment">"Time to BeReal" goes off in the middle of a lecture. By the time class ends, the 2 minutes are long gone, and the post goes up with "14 hr late" above it. One user said it feels like failing a test they never signed up for.</p>
+        <div class="three">
+          <div><h3>Randomness is the product</h3><p>Users call the random alert "both the best and worst part of the app." Removing it would remove what makes BeReal special.</p></div>
+          <div><h3>Most growth tactics are off-limits</h3><p>Streaks, urgency, and endless feeds would grow usage by going against BeReal's core values of being real and spontaneous.</p></div>
+          <div><h3>The penalty is public</h3><p>A missed window doesn't just cost a post. The late label stays on the photo for friends to see.</p></div>
+        </div>
+        <details class="more">
+          <summary>See the research: what users said, scored <span>Sentiment analysis + user journey</span></summary>
+          <div class="more-body">
+            <p class="small">I used AI-assisted analysis to group posts from TikTok, Reddit, App Store reviews, and public forums into themes, then scored each theme.</p>
+            <div class="scale"><span><b>Score scale:</b></span><span>1 = rarely raised, mild feeling</span><span>5 = raised most often, strongest feeling</span></div>
+            <div class="bars">
+              <div class="row head"><span class="label">Theme</span><span class="label">Score (1–5)</span><span class="label">Insight</span></div>
+              <div class="row"><span class="name">The 2-minute window causes stress</span><span class="meter"><span class="track"><i style="width:100%"></i></span>5</span><span class="insight">The most common complaint. The window and late label cause real stress, not mild annoyance.</span></div>
+              <div class="row"><span class="name">Random timing</span><span class="meter"><span class="track"><i style="width:80%"></i></span>4</span><span class="insight">Exciting in theory, disruptive in practice.</span></div>
+              <div class="row"><span class="name">Being real vs. looking good</span><span class="meter"><span class="track"><i style="width:80%"></i></span>4</span><span class="insight">People still worry about how they look, and late posts undercut BeReal's core value of being real.</span></div>
+              <div class="row"><span class="name">Low effort, healthier than other apps</span><span class="meter dim"><span class="track"><i style="width:60%"></i></span>3</span><span class="insight">A positive: people like that BeReal takes little time compared with other apps.</span></div>
+              <div class="row"><span class="name">Technical and notification bugs</span><span class="meter"><span class="track"><i style="width:60%"></i></span>3</span><span class="insight">Less common, but serious enough to make people delete the app.</span></div>
+            </div>
+            <p class="small"><b>Where it hurts in the user journey:</b> the problem shows up at the moment of posting.</p>
+            <ol class="journey">
+              <li><b>Sign up</b>Creates an account, allows camera and notifications</li>
+              <li><b>Add friends</b>Connects with friends already on the app</li>
+              <li class="hit"><b>Post</b>Gets the daily alert and posts. <em>The alert often lands at a bad time.</em></li>
+              <li><b>View</b>Scrolls friends' posts and reacts</li>
+              <li><b>Leave</b>Closes the app until tomorrow's alert</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="section" id="bereal-users">
+      <div class="label"><b>02</b>What it's for</div>
+      <div class="body">
+        <h2>For students and recent grads whose days run on a schedule.</h2>
+        <div class="persona">
+          <div><span class="label">Who</span><p>College students and people 1–2 years out of school. Their days are blocked into classes, shifts, and meetings.</p></div>
+          <div><span class="label">What they want</span><p>To post on time without stepping out of class or a meeting, and without the stress of a late label.</p></div>
+          <div><span class="label">Why it matters</span><p>When the alert keeps clashing with their schedule, posting becomes a recurring bad experience. That's when people stop opening the app.</p></div>
+        </div>
+        <div class="takeaway">
+          <span class="label">Key takeaway</span>
+          <p>Timing is the main reason people miss posts and drift away. Fixing it removes a reason to leave, without adding pressure to stay.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="bereal-competitors">
+      <div class="label"><b>03</b>Competitors</div>
+      <div class="body">
+        <h2>Rivals keep users with pressure and algorithms. BeReal needs a different lever.</h2>
+        <div class="tiers">
+          <span><b>Direct</b>Instagram, Snapchat</span>
+          <span><b>Indirect</b>TikTok, Locket</span>
+          <span><b>Substitute</b>iMessage, WhatsApp, Discord</span>
+        </div>
+        <div class="quad">
+          <svg viewBox="0 0 420 330" role="img" aria-label="Positioning map: engagement pressure versus authenticity. BeReal is low pressure and authentic. Snapchat sits in the middle. Instagram and TikTok are high pressure and performative.">
+            <rect class="zone" x="50" y="20" width="160" height="130" rx="6"/>
+            <line class="ax" x1="210" y1="20" x2="210" y2="280"/>
+            <line class="ax" x1="50" y1="150" x2="370" y2="150"/>
+            <rect x="50" y="20" width="320" height="260" fill="none" class="ax" rx="6"/>
+            <text class="q" x="58" y="36">LOW PRESSURE · AUTHENTIC</text>
+            <text class="q" x="218" y="36">HIGH PRESSURE · AUTHENTIC</text>
+            <text class="q" x="58" y="272">LOW PRESSURE · PERFORMATIVE</text>
+            <text class="q" x="218" y="272">HIGH PRESSURE · PERFORMATIVE</text>
+            <defs><clipPath id="icon-clip" clipPathUnits="objectBoundingBox"><rect width="1" height="1" rx="0.23"/></clipPath></defs>
+            <circle class="ring" cx="130" cy="72" r="24"/>
+            <image href="media/logo-bereal.png" x="114" y="56" width="32" height="32" clip-path="url(#icon-clip)"/><text class="nm" x="160" y="77">BeReal</text>
+            <image href="media/logo-snapchat.png" x="210" y="134" width="32" height="32" clip-path="url(#icon-clip)"/><text class="nm" x="248" y="155">Snapchat</text>
+            <image href="media/logo-instagram.png" x="284" y="182" width="32" height="32" clip-path="url(#icon-clip)"/><text class="nm" x="278" y="203" text-anchor="end">Instagram</text>
+            <image href="media/logo-tiktok.png" x="326" y="220" width="32" height="32"/><text class="nm" x="320" y="241" text-anchor="end">TikTok</text>
+            <text class="axl" x="210" y="300" text-anchor="middle">Engagement pressure →</text>
+            <text class="axl" x="0" y="0" text-anchor="middle" transform="translate(30 150) rotate(-90)">Authenticity →</text>
+          </svg>
+          <div class="body">
+            <p class="small">I chose Instagram as my main benchmark. It meets the same need (staying close to friends) at a similar scale, and its engagement-driven design is the sharpest contrast to BeReal.</p>
+            <p class="small">The lesson worth borrowing: Instagram's Following and Favorites feeds are popular because people want some control. BeReal could offer control over timing, without giving up the randomness.</p>
+            <p class="small muted">Positions are my estimates from the comparison below, not survey data.</p>
+          </div>
+        </div>
+        <div class="comps">
+          <figure class="comp">
+            <div class="shot"><img src="media/bereal-instagram.png" alt="Instagram Following and Favorites feed options"></div>
+            <h3>Instagram</h3>
+            <dl>
+              <dt>What's missing</dt><dd>Endless scroll, a ranked feed, and Reels keep people on the app longer, at the cost of authenticity.</dd>
+              <dt>How Unavailable Hours fills the gap</dt><dd class="fix">Borrows Instagram's best lesson, user control, and applies it to timing instead of feeds.</dd>
+            </dl>
+          </figure>
+          <figure class="comp">
+            <div class="shot"><img src="media/bereal-snapchat.png" alt="Snapchat chat list with a banner asking to turn on notifications"></div>
+            <h3>Snapchat</h3>
+            <dl>
+              <dt>What's missing</dt><dd>Sits in the middle on both pressure and authenticity. It's a direct rival for sharing everyday moments with friends.</dd>
+              <dt>How Unavailable Hours fills the gap</dt><dd class="fix">Lowers pressure instead of adding it, by removing a reason people stop posting.</dd>
+            </dl>
+          </figure>
+          <figure class="comp">
+            <div class="shot"><img src="media/bereal-tiktok.png" alt="TikTok For You feed"></div>
+            <h3>TikTok</h3>
+            <dl>
+              <dt>What's missing</dt><dd>The most pressure and least authenticity of the group. It's built for watching strangers, not sharing with friends.</dd>
+              <dt>How Unavailable Hours fills the gap</dt><dd class="fix">Keeps BeReal in its own corner: one random alert a day, now one that fits around real life.</dd>
+            </dl>
+          </figure>
+        </div>
+        <details class="more">
+          <summary>See how BeReal and Instagram compare, by interaction <span>Posting · Viewing · Browsing · Creating</span></summary>
+          <div class="more-body">
+            <div class="tbl">
+              <table>
+                <thead><tr><th>Interaction</th><th>BeReal</th><th>Instagram</th><th>How it keeps people coming back</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="cat">Posting</span></td><td>One random alert a day, 2 minutes to post</td><td>Stories that disappear after 24 hours</td><td>BeReal creates a daily reason to return. Instagram makes sharing low-stakes, which turns quiet users into posters.</td></tr>
+                  <tr><td><span class="cat">Viewing</span></td><td>Post first, then see friends' posts</td><td>Feed and Explore ranked by predicted interest</td><td>BeReal discourages passive scrolling. Instagram serves engaging content with no effort.</td></tr>
+                  <tr><td><span class="cat">Browsing</span></td><td>Only today's posts from friends, then it ends</td><td>Infinite scroll with no natural stopping point</td><td>BeReal keeps visits short and intentional. Instagram removes exit cues to lengthen visits.</td></tr>
+                  <tr><td><span class="cat">Creating</span></td><td>Front and back cameras at once, no edits</td><td>Reels: edited short videos, shown by algorithm</td><td>BeReal feels authentic, which builds the habit. Reels adds a second loop that keeps people watching.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="section" id="bereal-ideas">
+      <div class="label"><b>04</b>Ideas</div>
+      <div class="body">
+        <h2>I tested 7 ideas against one question: does it grow users without adding pressure?</h2>
+        <p class="small">I scored each idea with RICE: (Reach × Impact × Confidence) ÷ Effort. Higher is better.</p>
+        <div class="bars">
+          <div class="row"><span class="name">Unavailable Hours: block busy times</span><span class="meter"><span class="track"><i style="width:100%"></i></span>14.4</span><span class="insight">Every user hits timing problems eventually, and it needs only a small settings layer.</span></div>
+          <div class="row"><span class="name">Deck of Reals: rotating photo prompts</span><span class="meter dim"><span class="track"><i style="width:44%"></i></span>6.4</span><span class="insight">Helps on low-inspiration days, but more work to build.</span></div>
+          <div class="row"><span class="name">BeWith: post together with a friend</span><span class="meter dim"><span class="track"><i style="width:22%"></i></span>3.2</span><span class="insight">Fun and social, but reaches fewer people.</span></div>
+          <div class="row"><span class="name">BeReal for Two: private feed for pairs</span><span class="meter dim"><span class="track"><i style="width:17%"></i></span>2.5</span><span class="insight">Could open a new audience, but low confidence.</span></div>
+          <div class="row"><span class="name">Time-of-day look: colors shift by hour</span><span class="meter dim"><span class="track"><i style="width:17%"></i></span>2.5</span><span class="insight">Easy and wide-reaching, but small impact.</span></div>
+          <div class="row"><span class="name">Friends of friends: one discovery post a week</span><span class="meter dim"><span class="track"><i style="width:12%"></i></span>1.75</span><span class="insight">Grows the network, but risks feeling like a feed.</span></div>
+          <div class="row"><span class="name">Weather and mood tags on posts</span><span class="meter dim"><span class="track"><i style="width:12%"></i></span>1.75</span><span class="insight">Adds memories over time, but little effect on daily use.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="bereal-solution">
+      <div class="label"><b>05</b>My solution</div>
+      <div class="body">
+        <h2>Let people block when they can't post, never choose when they will.</h2>
+        <p>Unavailable Hours lets users block off chunks of time when they don't want the daily alert. It still fires once a day at a random moment, just outside the blocked hours.</p>
+        <h3 class="sub">The key decision</h3>
+        <p class="small">I weighed two ways to give people control and reviewed them in my check-ins with the program's project manager. The deciding question was which option keeps the alert unpredictable.</p>
+        <div class="options">
+          <div class="option"><span class="verdict">Option 1 · Not chosen</span><h3>Pick a preferred window</h3><p>"Notify me sometime between 6 and 9 PM."</p><ul><li>Turns BeReal into a scheduling tool</li><li>People could plan their post, which breaks "spontaneous"</li><li>Moves BeReal toward the curated experience Instagram already owns</li></ul></div>
+          <div class="option chosen"><span class="verdict">Option 2 · Chosen</span><h3>Block unavailable time</h3><p>"Don't notify me from 9 AM to 5 PM."</p><ul><li>Works like Do Not Disturb or a busy block on a calendar, so people already get it</li><li>The alert stays random within all other hours</li><li>Users control when it can't happen, never when it will</li></ul></div>
+        </div>
+        <div class="insights">
+          <div class="insight"><h3>Blocks, not exact times</h3><p>Time is set in chunks, not to the minute. Each block is at least 3 hours, and total blocked time stays under about 21 hours, so the alert always has room to land.</p></div>
+          <div class="insight"><h3>Small to build</h3><p>No change to the random alert itself. It adds a settings and validation layer on top, which is why it tied for the lowest effort score of all 7 ideas.</p></div>
+          <div class="insight"><h3>Private and optional</h3><p>Friends never see your blocked hours, and you can turn the feature off anytime.</p></div>
+          <div class="insight"><h3>One user request I said no to</h3><p>A tester asked for a heads-up when a block ends. I didn't add it because it would tell people the alert's window just opened, which makes BeReal predictable and breaks the "spontaneous, not addictive" pillar.</p></div>
+        </div>
+        <h3 class="sub">The prototype flow</h3>
+        <ol class="screens phones five">
+          <li><div class="shot"><img src="media/bereal-proto-intro-1.png" alt="Intro screen: Introducing Unavailable Hours"></div><b>Learn it</b><span class="new">Added after testing</span>A short intro explains the feature.</li>
+          <li><div class="shot"><img src="media/bereal-proto-settings.png" alt="BeReal settings with Unavailable Hours marked New"></div><b>Find it</b>Lives in Settings, marked New.</li>
+          <li><div class="shot"><img src="media/bereal-proto-set-hours.png" alt="Unavailable Hours screen with the Enable toggle on"></div><b>Turn it on</b>One main toggle.</li>
+          <li><div class="shot"><img src="media/bereal-proto-add-block.png" alt="Unavailable Hours screen with two time blocks"></div><b>Set blocks</b>Add one or more busy windows.</li>
+          <li><div class="shot"><img src="media/bereal-proto-done.png" alt="Confirmation screen saying Done"></div><b>Confirm</b><span class="new">Added after testing</span>Shows that your settings saved.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="bereal-business">
+      <div class="label"><b>06</b>Business case</div>
+      <div class="body">
+        <h2>Every skipped post is a day with no ad views.</h2>
+        <p>BeReal now makes money from ads shown in the feed. Since you have to post before you can see your friends' feed, a missed alert costs more than one photo. It means no feed visit and no ad views that day.</p>
+        <ol class="chain" aria-label="How a badly timed alert costs revenue">
+          <li><b>Alert lands at a bad time</b>In class, at work, or in a meeting</li>
+          <li><b>User skips the post</b>Or posts late and gets the "late" label</li>
+          <li><b>Feed stays locked</b>No post means no friends' posts to view</li>
+          <li><b>No ad views</b>Ads only appear in the feed</li>
+        </ol>
+        <div class="stats">
+          <div class="stat"><strong>~50%</strong><span>drop in daily users from the October 2022 peak to early 2023, per Apptopia</span></div>
+          <div class="stat"><strong>40M</strong><span>monthly users BeReal reports, half of them active six days a week (company figures, April 2025)</span></div>
+          <div class="stat"><strong>30–35%</strong><span>of negative user sentiment in my research was about the alert's timing</span></div>
+        </div>
+        <div class="insights">
+          <div class="insight"><h3>Why now</h3><p>Voodoo bought BeReal for €500 million in June 2024, and BeReal launched ads in the US in April 2025. Keeping people opening the app each day now affects revenue directly.</p></div>
+          <div class="insight"><h3>Low cost</h3><p>It doesn't change the random alert itself, just adds a settings layer on top. It tied for the lowest effort score of the 7 ideas I ranked.</p></div>
+          <div class="insight"><h3>Protects what advertisers pay for</h3><p>Advertisers come for an authentic, mostly Gen Z audience. This feature grows usage by removing stress, not by adding pressure that would make BeReal feel like every other app.</p></div>
+          <div class="insight"><h3>What it could mean</h3><p>An illustration, not a forecast: about 20M of BeReal's reported users aren't near-daily. If the feature helped just 1% of them post two more days a week, that would add roughly 20 million more days of feed visits a year.</p></div>
+        </div>
+        <p class="small muted">How I'd confirm it: launch to a test group and compare days active per week against users without the feature. Sources: <a href="https://techcrunch.com/2025/04/10/bereal-which-says-it-has-40m-monthly-users-is-rolling-out-ads-in-the-u-s/" target="_blank" rel="noopener">TechCrunch, Apr 2025</a> · <a href="https://petapixel.com/2023/02/22/bereal-may-be-on-the-out-users-have-nearly-halved-since-peak" target="_blank" rel="noopener">PetaPixel / Apptopia, Feb 2023</a> · <a href="https://www.konvoy.vc/content/voodoo-gets-real" target="_blank" rel="noopener">Konvoy, Jun 2024</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="bereal-testing">
+      <div class="label"><b>07</b>Testing &amp; results</div>
+      <div class="body">
+        <h2>Most testers understood it right away and said they'd post more.</h2>
+        <p class="small">I ran an in-person, moderated focus group with college-age users using the Figma prototype. It followed a 40-minute plan:</p>
+        <div class="timeline" aria-label="Session plan">
+          <div style="flex:5"><span>5 min</span><b>Intro</b></div>
+          <div style="flex:5"><span>5 min</span><b>Warm-up</b></div>
+          <div style="flex:10"><span>10 min</span><b>Prototype demo</b></div>
+          <div style="flex:15"><span>15 min</span><b>Discussion</b></div>
+          <div style="flex:5"><span>5 min</span><b>Survey</b></div>
+        </div>
+        <p class="small">I then sorted every quote into themes: usability, clarity, value, behavior, and signs of more use.</p>
+        <div class="findings">
+          <div class="fcol good">
+            <h3><i>✓</i>What worked</h3>
+            <blockquote>"Similar to 'Do Not Disturb.'"<small>Familiar idea, no learning needed</small></blockquote>
+            <blockquote>"It would be perfect for when I'm in class."<small>Matches the target use</small></blockquote>
+            <blockquote>"I'd be way more active on the app if this existed."<small>Sign of more use</small></blockquote>
+            <blockquote>"It makes it more real for adults."<small>Could widen the audience</small></blockquote>
+          </div>
+          <div class="fcol bad">
+            <h3><i>!</i>What confused people</h3>
+            <blockquote>"I assumed I could edit the time — not being able to do that was confusing."<small>The prototype used preset times. A real build needs a working time picker.</small></blockquote>
+            <blockquote>"There was no way to know if my post even posted."<small>Fixed: I added a confirmation screen.</small></blockquote>
+            <blockquote>"To be honest, I didn't really understand what it was for… building some context for it could be nice, like opening screens."<small>Fixed: I added a three-screen intro.</small></blockquote>
+          </div>
+          <div class="fcol idea">
+            <h3><i>+</i>What people asked for</h3>
+            <blockquote>"A heads-up notification once the block ends would be a good add-on."<small>Considered and not built, because it would make the alert predictable.</small></blockquote>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><strong>83%</strong><span>of testers said they'd recommend it to a friend</span></div>
+          <div class="stat"><strong>14.4</strong><span>RICE score, the highest of 7 ideas</span></div>
+          <div class="stat"><strong>3</strong><span>usability gaps found; I've fixed two</span></div>
+        </div>
+        <p class="small muted">The 83% shows people understood and wanted the feature. It isn't a usage number: this was a concept test on a prototype, not a live experiment.</p>
+      </div>
+    </section>
+
+    <section class="section" id="bereal-learned">
+      <div class="label"><b>08</b>What I learned</div>
+      <div class="body">
+        <h2>Removing friction can grow a product without adding pressure.</h2>
+        <div class="insights">
+          <div class="insight"><h3>Familiar beats clever</h3><p>Most testers understood Unavailable Hours right away because it works like Do Not Disturb. One didn't, so I added a short intro. Even a familiar idea needs a little context.</p></div>
+          <div class="insight"><h3>Feedback is input, not instructions</h3><p>I said no to a feature a tester asked for because it broke BeReal's "spontaneous, not addictive" pillar. Listening to users and protecting a core principle can point in different directions.</p></div>
+          <div class="insight"><h3>Wanting a feature isn't using it</h3><p>"83% would recommend it" shows people want it, not that they'd post more. That's why my next step is a live test that measures real behavior.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="bereal-next">
+      <div class="label"><b>09</b>What I'd do next</div>
+      <div class="body">
+        <h2>Fix the gaps, then measure real usage.</h2>
+        <ul class="next">
+          <li>Make adding and removing time blocks work the same on every screen.</li>
+          <li>Run a second, larger round of testing on the refined prototype.</li>
+          <li>Launch to a test group first and compare daily posting and 7- and 30-day return rates against users without the feature.</li>
+          <li>Confirm the 3-hour minimum and 21-hour cap with real usage data.</li>
+          <li>Watch whether some users feel it makes the app less random over time.</li>
+          <li>If it works, apply the same "limit without scheduling" idea to late-post reminders.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <section class="connect" id="connect" aria-labelledby="connect-title">
+    <span class="label">Let's connect</span>
+    <h2 id="connect-title">Open to full-time product management roles starting in 2027.</h2>
+    <p>I'd love to talk about product, these projects, or a team you think I'd fit on.</p>
+    <div class="connect-row">
+      <div class="email">
+        <span class="label">Email</span>
+        <span class="addr" id="email-addr">dd572@njit.edu</span>
+        <button class="copy" type="button" id="copy-email">Copy</button>
+      </div>
+      <a class="btn" href="https://www.linkedin.com/in/dharaa-lnu" target="_blank" rel="noopener">Connect on LinkedIn ↗</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>Dharaa · Selected work · 2026</span>
+    <a href="#home">Back to all projects ↑</a>
+  </footer>
+</div>
+
+
+<script>
+(function () {
+  const views = ["home", "greenroute", "bereal"];
+  function route() {
+    const hash = location.hash.slice(1);
+    let view = hash.split("-")[0];
+    if (!views.includes(view)) view = "home";
+    views.forEach(v => { document.getElementById(v).hidden = v !== view; });
+    document.querySelectorAll(".tabs a").forEach(a => {
+      if (a.dataset.tab === view) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
+    const target = hash.includes("-") ? document.getElementById(hash) : null;
+    if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
+  }
+  route();
+  window.addEventListener("hashchange", route);
+
+  // Copy email: falls back to selecting the text if the clipboard is blocked
+  const copyBtn = document.getElementById("copy-email");
+  const addr = document.getElementById("email-addr");
+  if (copyBtn && addr) copyBtn.addEventListener("click", () => {
+    const done = label => { copyBtn.textContent = label; setTimeout(() => { copyBtn.textContent = "Copy"; }, 1800); };
+    const select = () => { const r = document.createRange(); r.selectNodeContents(addr); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); done("Selected"); };
+    try { navigator.clipboard.writeText(addr.textContent).then(() => done("Copied"), select); } catch (e) { select(); }
+  });
+
+  // Résumé: use the full https address so it opens in a new browser tab, not inside this page
+  const resume = document.getElementById("resume-link");
+  if (resume) resume.href = new URL(resume.getAttribute("href"), location.href).href;
+
+  // Video players: play media/<project>-demo.mp4 if it exists, otherwise show the placeholder
+  document.querySelectorAll(".demo").forEach(fig => {
+    const video = fig.querySelector("video");
+    const empty = fig.querySelector(".empty");
+    video.addEventListener("loadeddata", () => { empty.hidden = true; });
+    video.addEventListener("error", () => { empty.hidden = false; });
+    video.src = fig.dataset.video;
+  });
+
+  // Screenshots: show a labeled slot until the image file exists
+  document.querySelectorAll(".shot img").forEach(img => {
+    const swap = () => {
+      const ph = document.createElement("div");
+      ph.className = "ph";
+      ph.innerHTML = "<span>Add screenshot</span><code></code>";
+      ph.querySelector("code").textContent = img.getAttribute("src");
+      img.replaceWith(ph);
+    };
+    if (img.complete && img.naturalWidth === 0) swap(); else img.addEventListener("error", swap);
+  });
+})();
+</script>
+</body>
+</html>
